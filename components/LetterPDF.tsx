@@ -2,7 +2,13 @@ import {
   Document, Page, Text, View, Image, StyleSheet, Font,
 } from "@react-pdf/renderer";
 
-// Using built-in PDF fonts - no external loading required
+Font.register({
+  family: "Roboto",
+  fonts: [
+    { src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf", fontWeight: 400 },
+    { src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf", fontWeight: 700 },
+  ],
+});
 
 const PURPLE      = "#6B30B5";
 const PURPLE_DARK = "#7038BE";
@@ -34,16 +40,16 @@ export interface LetterProps {
 }
 
 const s = StyleSheet.create({
-  page:     { fontFamily:"Helvetica", fontSize:10, color:BLACK, backgroundColor:"#fff" },
-  pageWrap: { fontFamily:"Helvetica", fontSize:10, color:BLACK, backgroundColor:"#fff" },
+  page:     { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
+  pageWrap: { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   lhBg:     { position:"absolute", top:0, left:0, width:"100%", height:"100%" },
-  content:  { marginTop:125, marginLeft:40, marginRight:40, marginBottom:90 },
+  content:  { paddingTop:185, paddingLeft:55, paddingRight:55, paddingBottom:150 },
   title:    { fontSize:17, fontWeight:700, color:PURPLE, textAlign:"center", borderBottomColor:PURPLE, borderBottomWidth:2, paddingBottom:5, marginBottom:12 },
   metaRow:  { flexDirection:"row", justifyContent:"space-between", fontSize:9.5, marginBottom:10 },
-  bold:     { fontFamily:"Helvetica-Bold" },
+  bold:     { fontFamily:"Roboto", fontWeight:700 },
   para:     { marginBottom:8, lineHeight:1.7, textAlign:"justify", fontSize:10 },
   grey:     { color:GREY, fontSize:9 },
-  secBand:  { backgroundColor:PURPLE_DARK, color:"#fff", fontFamily:"Helvetica-Bold", fontSize:10, padding:6, paddingLeft:10, borderRadius:4, marginTop:12, marginBottom:6 },
+  secBand:  { backgroundColor:PURPLE_DARK, color:"#fff", fontFamily:"Roboto", fontWeight:700, fontSize:10, padding:6, paddingLeft:10, borderRadius:4, marginTop:12, marginBottom:6 },
   thRow:    { flexDirection:"row", backgroundColor:PURPLE_DARK },
   trEven:   { flexDirection:"row", backgroundColor:"#fff" },
   trOdd:    { flexDirection:"row", backgroundColor:"#F6F1FB" },
@@ -76,7 +82,7 @@ function inWords(n: number): string {
 function LHPage({children}:{children:React.ReactNode}){
   return(
     <Page size="A4" style={s.page} wrap>
-      {/* Letterhead image — fixed so it appears on every page without wrapping */}
+      {/* Letterhead image - fixed so it appears on every page without wrapping */}
       <Image src={LH_URL} style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}} fixed/>
       {/* Content */}
       <View style={s.content} wrap>{children}</View>
@@ -138,8 +144,8 @@ function CompTable({compRows,label}:{compRows:CompRow[];label:string}){
       <View style={{marginBottom:10}}>
         <View style={s.thRow} wrap={false}>
           <Text style={s.th}>Salary Component</Text>
-          <Text style={[s.th,s.tdRight]}>Monthly (Rs)</Text>
-          <Text style={[s.th,s.tdRight]}>Annual (Rs)</Text>
+          <Text style={[s.th,s.tdRight]}>Monthly (Rs.)</Text>
+          <Text style={[s.th,s.tdRight]}>Annual (Rs.)</Text>
         </View>
         {compRows.map((r,i)=>(<TRow key={i} idx={i} purple cells={[r.label,(+r.monthly||0).toLocaleString("en-IN"),(+r.annual||0).toLocaleString("en-IN")]}/>))}
         <TRow total cells={["Cost to Company (CTC)",totalM.toLocaleString("en-IN"),totalA.toLocaleString("en-IN")]}/>
