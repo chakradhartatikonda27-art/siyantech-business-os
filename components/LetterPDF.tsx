@@ -76,35 +76,8 @@ function inWords(n: number): string {
 function LHPage({children}:{children:React.ReactNode}){
   return(
     <Page size="A4" style={s.page} wrap>
-      {/* Purple header band */}
-      <View style={{position:"absolute",top:0,left:0,right:0,height:110,backgroundColor:PURPLE_DARK}} fixed/>
-      {/* Company name in header */}
-      <View style={{position:"absolute",top:18,left:40,right:160}} fixed>
-        <Text style={{color:"#fff",fontSize:13,fontFamily:"Helvetica-Bold"}}>SiyanTech Global Innovations Pvt. Ltd.</Text>
-        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:8,marginTop:3}}>ISO 9001:2015 | ISO/IEC 27001:2022 | MSME Registered</Text>
-        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:8,marginTop:2}}>{COMPANY.address}</Text>
-      </View>
-      {/* GLOBAL INNOVATIONS text */}
-      <View style={{position:"absolute",top:18,right:30,alignItems:"flex-end"}} fixed>
-        <Text style={{color:"#fff",fontSize:8}}>GLOBAL INNOVATIONS PVT. LTD.</Text>
-        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:7,marginTop:2}}>{COMPANY.phone}</Text>
-        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:7}}>{COMPANY.email}</Text>
-      </View>
-      {/* Purple bottom band */}
-      <View style={{position:"absolute",bottom:0,left:0,right:0,height:32,backgroundColor:PURPLE_DARK}} fixed/>
-      <View style={{position:"absolute",bottom:9,left:0,right:0,alignItems:"center"}} fixed>
-        <Text style={{color:"#fff",fontSize:9}}>www.siyantechglobal.com</Text>
-      </View>
-      {/* Footer contact */}
-      <View style={{position:"absolute",bottom:38,left:40,right:40,flexDirection:"row",justifyContent:"space-between"}} fixed>
-        <View>
-          <Text style={{fontSize:7.5,fontFamily:"Helvetica-Bold",color:BLACK}}>{COMPANY.phone}</Text>
-          <Text style={{fontSize:7.5,color:BLACK}}>{COMPANY.email}</Text>
-        </View>
-        <View style={{alignItems:"flex-end"}}>
-          <Text style={{fontSize:7.5,color:BLACK}}>{COMPANY.address}</Text>
-        </View>
-      </View>
+      {/* Letterhead image — fixed so it appears on every page without wrapping */}
+      <Image src={LH_URL} style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}} fixed/>
       {/* Content */}
       <View style={s.content} wrap>{children}</View>
     </Page>
