@@ -125,7 +125,7 @@ function Slip({ r }: { r: EmpResult }) {
             ] as [string,number|string,string,number|string][]).map(([el,ev,dl,dv],i)=>(
               <tr key={i} style={{background:i%2===0?"#fff":"#F6F1FB"}}>
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0"}}>{el}</td>
-                <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{ev!===""?Number(ev).toLocaleString("en-IN"):""}</td>
+                <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{ev !== "" ? Number(ev).toLocaleString("en-IN") : ""}</td>
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0"}}>{dl}</td>
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{dv !== 0 && dv !== "" ? Number(dv).toLocaleString("en-IN") : ""}</td>
               </tr>
