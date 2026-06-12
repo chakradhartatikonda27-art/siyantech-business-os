@@ -43,7 +43,7 @@ const s = StyleSheet.create({
   page:     { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   pageWrap: { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   lhBg:     { position:"absolute", top:0, left:0, width:"100%", height:"100%" },
-  content:  { paddingTop:185, paddingLeft:55, paddingRight:55, paddingBottom:150 },
+  content:  { paddingTop:220, paddingLeft:55, paddingRight:55, paddingBottom:155 },
   title:    { fontSize:17, fontWeight:700, color:PURPLE, textAlign:"center", borderBottomColor:PURPLE, borderBottomWidth:2, paddingBottom:5, marginBottom:12 },
   metaRow:  { flexDirection:"row", justifyContent:"space-between", fontSize:9.5, marginBottom:10 },
   bold:     { fontFamily:"Roboto", fontWeight:700 },
