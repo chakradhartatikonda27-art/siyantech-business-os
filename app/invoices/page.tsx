@@ -41,7 +41,7 @@ export default function InvoicesPage() {
   const addItem = () => setItems([...items, {desc:"", qty:1, rate:0}]);
   const updateItem = (i:number, field:string, val:string) => {
     const updated = [...items];
-    (updated[i] as never)[field] = field === "desc" ? val : +val;
+    if (field === "desc") { updated[i].desc = val; } else if (field === "qty") { updated[i].qty = +val; } else { updated[i].rate = +val; }
     setItems(updated);
   };
 
