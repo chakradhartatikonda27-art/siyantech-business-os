@@ -296,7 +296,7 @@ export default function HRLettersPage() {
                 <div style={{marginBottom:"14px"}}>
                   <label style={{display:"block", fontSize:"11px", fontWeight:"600", color:"#5C5470", textTransform:"uppercase", marginBottom:"5px"}}>Employee</label>
                   <select value={empId} onChange={e => {setEmpId(e.target.value); setPreview("");}}
-                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px"}}>
+                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px", color:"#1E1428", background:"#fff"}}>
                     {EMPLOYEES.map(e => <option key={e.id} value={e.id}>{e.fullName} — {e.designation}</option>)}
                   </select>
                 </div>
@@ -314,7 +314,7 @@ export default function HRLettersPage() {
                   <div key={f.k} style={{marginBottom:"12px"}}>
                     <label style={{display:"block", fontSize:"11px", fontWeight:"600", color:"#5C5470", textTransform:"uppercase", marginBottom:"5px"}}>{f.l}</label>
                     <input placeholder={f.p} value={extra[f.k]||""} onChange={e => setEx(f.k, e.target.value)}
-                      style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px"}} />
+                      style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px", color:"#1E1428", background:"#fff"}} />
                   </div>
                 ))}</>
               )}
@@ -323,7 +323,7 @@ export default function HRLettersPage() {
                 <div style={{marginBottom:"12px"}}>
                   <label style={{display:"block", fontSize:"11px", fontWeight:"600", color:"#5C5470", textTransform:"uppercase", marginBottom:"5px"}}>Last Working Day</label>
                   <input placeholder="23rd February 2026" value={extra.lastDay||""} onChange={e => setEx("lastDay", e.target.value)}
-                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px"}} />
+                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px", color:"#1E1428", background:"#fff"}} />
                 </div>
               )}
 
@@ -331,7 +331,7 @@ export default function HRLettersPage() {
                 <div style={{marginBottom:"12px"}}>
                   <label style={{display:"block", fontSize:"11px", fontWeight:"600", color:"#5C5470", textTransform:"uppercase", marginBottom:"5px"}}>Date of Joining</label>
                   <input placeholder="01st July 2026" value={extra.joiningDate||""} onChange={e => setEx("joiningDate", e.target.value)}
-                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px"}} />
+                    style={{width:"100%", padding:"9px 11px", border:"1px solid #E2D8EE", borderRadius:"9px", fontSize:"13px", color:"#1E1428", background:"#fff"}} />
                 </div>
               )}
 
