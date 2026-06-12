@@ -86,7 +86,7 @@ function lhOpen(useHoriz = false) {
   </div>
 
   <!-- document content -->
-  <div style="position:relative;z-index:3;padding:158px 44px 100px">`;
+  <div style="position:relative;z-index:3;padding:158px 44px 100px;color:#1A1128">`;
 }
 
 function lhClose() {
