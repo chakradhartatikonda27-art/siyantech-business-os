@@ -2,14 +2,7 @@ import {
   Document, Page, Text, View, Image, StyleSheet, Font,
 } from "@react-pdf/renderer";
 
-Font.register({
-  family: "Poppins",
-  fonts: [
-    { src: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2", fontWeight: 400 },
-    { src: "https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2", fontWeight: 600 },
-    { src: "https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2", fontWeight: 700 },
-  ],
-});
+// Using built-in PDF fonts - no external loading required
 
 const PURPLE      = "#6B30B5";
 const PURPLE_DARK = "#7038BE";
@@ -41,15 +34,16 @@ export interface LetterProps {
 }
 
 const s = StyleSheet.create({
-  page:     { fontFamily:"Poppins", fontSize:10, color:BLACK, backgroundColor:"#fff" },
+  page:     { fontFamily:"Helvetica", fontSize:10, color:BLACK, backgroundColor:"#fff" },
+  pageWrap: { fontFamily:"Helvetica", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   lhBg:     { position:"absolute", top:0, left:0, width:"100%", height:"100%" },
-  content:  { marginTop:185, marginLeft:52, marginRight:52, marginBottom:110 },
+  content:  { marginTop:125, marginLeft:40, marginRight:40, marginBottom:90 },
   title:    { fontSize:17, fontWeight:700, color:PURPLE, textAlign:"center", borderBottomColor:PURPLE, borderBottomWidth:2, paddingBottom:5, marginBottom:12 },
   metaRow:  { flexDirection:"row", justifyContent:"space-between", fontSize:9.5, marginBottom:10 },
-  bold:     { fontWeight:700 },
+  bold:     { fontFamily:"Helvetica-Bold" },
   para:     { marginBottom:8, lineHeight:1.7, textAlign:"justify", fontSize:10 },
   grey:     { color:GREY, fontSize:9 },
-  secBand:  { backgroundColor:PURPLE_DARK, color:"#fff", fontWeight:600, fontSize:10, padding:6, paddingLeft:10, borderRadius:4, marginTop:12, marginBottom:6 },
+  secBand:  { backgroundColor:PURPLE_DARK, color:"#fff", fontFamily:"Helvetica-Bold", fontSize:10, padding:6, paddingLeft:10, borderRadius:4, marginTop:12, marginBottom:6 },
   thRow:    { flexDirection:"row", backgroundColor:PURPLE_DARK },
   trEven:   { flexDirection:"row", backgroundColor:"#fff" },
   trOdd:    { flexDirection:"row", backgroundColor:"#F6F1FB" },
@@ -82,12 +76,37 @@ function inWords(n: number): string {
 function LHPage({children}:{children:React.ReactNode}){
   return(
     <Page size="A4" style={s.page} wrap>
-      <Image src={LH_URL} style={s.lhBg}/>
-      <View style={s.content} wrap>{children}</View>
-      <View style={s.footer}>
-        <View><Text style={s.bold}>{COMPANY.phone}</Text><Text>{COMPANY.email}</Text></View>
-        <View style={{alignItems:"flex-end"}}><Text>{COMPANY.address}</Text></View>
+      {/* Purple header band */}
+      <View style={{position:"absolute",top:0,left:0,right:0,height:110,backgroundColor:PURPLE_DARK}} fixed/>
+      {/* Company name in header */}
+      <View style={{position:"absolute",top:18,left:40,right:160}} fixed>
+        <Text style={{color:"#fff",fontSize:13,fontFamily:"Helvetica-Bold"}}>SiyanTech Global Innovations Pvt. Ltd.</Text>
+        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:8,marginTop:3}}>ISO 9001:2015 | ISO/IEC 27001:2022 | MSME Registered</Text>
+        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:8,marginTop:2}}>{COMPANY.address}</Text>
       </View>
+      {/* GLOBAL INNOVATIONS text */}
+      <View style={{position:"absolute",top:18,right:30,alignItems:"flex-end"}} fixed>
+        <Text style={{color:"#fff",fontSize:8}}>GLOBAL INNOVATIONS PVT. LTD.</Text>
+        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:7,marginTop:2}}>{COMPANY.phone}</Text>
+        <Text style={{color:"rgba(255,255,255,0.85)",fontSize:7}}>{COMPANY.email}</Text>
+      </View>
+      {/* Purple bottom band */}
+      <View style={{position:"absolute",bottom:0,left:0,right:0,height:32,backgroundColor:PURPLE_DARK}} fixed/>
+      <View style={{position:"absolute",bottom:9,left:0,right:0,alignItems:"center"}} fixed>
+        <Text style={{color:"#fff",fontSize:9}}>www.siyantechglobal.com</Text>
+      </View>
+      {/* Footer contact */}
+      <View style={{position:"absolute",bottom:38,left:40,right:40,flexDirection:"row",justifyContent:"space-between"}} fixed>
+        <View>
+          <Text style={{fontSize:7.5,fontFamily:"Helvetica-Bold",color:BLACK}}>{COMPANY.phone}</Text>
+          <Text style={{fontSize:7.5,color:BLACK}}>{COMPANY.email}</Text>
+        </View>
+        <View style={{alignItems:"flex-end"}}>
+          <Text style={{fontSize:7.5,color:BLACK}}>{COMPANY.address}</Text>
+        </View>
+      </View>
+      {/* Content */}
+      <View style={s.content} wrap>{children}</View>
     </Page>
   );
 }
