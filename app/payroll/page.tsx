@@ -127,7 +127,7 @@ function Slip({ r }: { r: EmpResult }) {
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0"}}>{el}</td>
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{ev!===""?Number(ev).toLocaleString("en-IN"):""}</td>
                 <td style={{padding:"5px 9px",border:"1px solid #E4DAF0"}}>{dl}</td>
-                <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{dv!==0&&dv!==""?Number(dv).toLocaleString("en-IN"):""}</td>
+                <td style={{padding:"5px 9px",border:"1px solid #E4DAF0",textAlign:"right"}}>{dv !== 0 && dv !== "" ? Number(dv).toLocaleString("en-IN") : ""}</td>
               </tr>
             ))}
             <tr style={{background:"#6B30B5",color:"#fff",fontWeight:700}}>
