@@ -70,9 +70,20 @@ function defaultCompRows(g: number): CompRow[] {
 }
 
 function lhOpen() {
-  return `<div style="position:relative;font-family:Poppins,sans-serif;width:794px;background:#fff;margin:0 auto"><img src="/letterhead.png" style="position:absolute;top:0;left:0;width:100%;height:auto;z-index:0;pointer-events:none" /><div style="position:relative;z-index:3;padding:280px 65px 160px;color:#1A1128;font-size:11px;line-height:1.7">`;
+  return `
+<div style="position:relative;font-family:Poppins,sans-serif;width:794px;min-height:1123px;margin:0 auto;overflow:hidden">
+  <img src="/letterhead.png" style="position:absolute;top:0;left:0;width:794px;height:1123px;object-fit:fill;z-index:0;pointer-events:none" />
+  <div style="position:relative;z-index:3;padding:185px 65px 140px;color:#1A1128;font-size:11px;line-height:1.7">`;
 }
-function lhClose() { return `</div></div>`; }
+function lhClose() {
+  return `
+  </div>
+  <div style="position:absolute;bottom:42px;left:55px;right:55px;display:flex;justify-content:space-between;font-size:8.5px;color:#1A1128;z-index:4;line-height:1.6">
+    <div><b>☏ +91 9390560625 / +91 6302042599</b><br>✉ Info@siyantechglobal.com</div>
+    <div style="text-align:right">Flat No. S-4, Third Floor, Rednam Plaza,<br>Dwarakanagar Second Lane, Visakhapatnam - 530016</div>
+  </div>
+</div>`;
+}
 
 function secBand(t: string) {
   return `<div style="background:linear-gradient(135deg,#6B30B5,#9044C0);color:#fff;font-weight:600;font-size:10.5px;padding:7px 12px;border-radius:5px;margin:14px 0 8px">${t}</div>`;
@@ -122,14 +133,9 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
     ${compTable("2. COMPENSATION DETAILS")}
     <p style="font-size:9px;color:#5C5470;margin-bottom:10px">CTC in words: Rupees ${inWords(ctc)} Only.</p>
     ${secBand("3. TERMS & CONDITIONS")}
-    <ol style="font-size:10px;line-height:1.8;margin-left:18px;margin-bottom:12px">
-      <li>This offer is subject to verification of all original educational certificates, identity proof and other relevant documents at the time of joining.</li>
-      <li>During the probation period of 3 months, either party may terminate employment with 7 days' written notice.</li>
-      <li>You are required to maintain strict confidentiality of all company data, client information and business processes during and after employment.</li>
-      <li>This offer letter is valid for 7 days from the date of issue. Kindly sign and return a copy as confirmation of acceptance.</li>
-      <li>Any false declaration of information or credentials shall lead to immediate termination of employment.</li>
-      <li>The employee shall comply with all company policies including the Information Security Policy (ISO/IEC 27001:2022) and Code of Conduct.</li>
-    </ol>
+    <div style="font-size:10px;line-height:1.8;margin-bottom:12px">
+      ${(extra.tcClauses||"This offer is subject to verification of all original educational certificates, identity proof and other relevant documents at the time of joining.\nDuring the probation period of 3 months, either party may terminate employment with 7 days written notice.\nYou are required to maintain strict confidentiality of all company data, client information and business processes during and after employment.\nThis offer letter is valid for 7 days from the date of issue. Kindly sign and return a copy as confirmation of acceptance.\nAny false declaration of information or credentials shall lead to immediate termination of employment.\nThe employee shall comply with all company policies including the Information Security Policy (ISO/IEC 27001:2022) and Code of Conduct.").split("\n").map((c:string)=>c.trim()).filter((c:string)=>c).map((c:string)=>`<div style="display:flex;gap:8px;margin-bottom:6px"><span style="color:#6B30B5;font-weight:700;flex-shrink:0">•</span><span>${c}</span></div>`).join("")}
+    </div>
     <p style="font-size:10px;margin-bottom:6px">We welcome you to the SiyanTech family and look forward to a long and productive association.</p>
     ${sigBlock(signatory, sigTitle, extra.candidateName)}
     `+lhClose();
@@ -325,6 +331,15 @@ export default function HRLettersPage() {
                   </div>
                 ))}
               </>)}
+
+              {type==="offer" && (
+                <div style={{marginBottom:"14px"}}>
+                  <label style={LS}>Terms & Conditions (one per line — leave blank for default)</label>
+                  <textarea value={extra.tcClauses||""} onChange={e=>setEx("tcClauses",e.target.value)}
+                    placeholder={"This offer is subject to verification of documents...\nDuring probation, either party may terminate with 7 days notice..."}
+                    rows={5} style={{...IS, resize:"vertical" as const, fontSize:"11px"}} />
+                </div>
+              )}
 
               {(type==="experience"||type==="relieving") && (
                 <div style={{marginBottom:"12px"}}>
