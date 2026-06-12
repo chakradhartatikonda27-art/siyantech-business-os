@@ -52,42 +52,10 @@ function getRefNumber(type: string) {
 // ── Letterhead shell ──────────────────────────────────────────────────────────
 // useHoriz=true  → horizontal logo (invoices, offer letter)
 // useHoriz=false → stacked logo   (payslip, experience, relieving, salary)
-function lhOpen(useHoriz = false) {
-  const logoSrc = useHoriz ? "/logo-horiz.png" : "/logo-stacked.png";
-  const logoW   = useHoriz ? "170px" : "110px";
-  return `
-<div style="position:relative;background:#FAF7FE;font-family:Poppins,sans-serif;min-height:900px;overflow:hidden">
-
-  <!-- sweep top-left -->
-  <div style="position:absolute;top:0;left:0;width:55%;height:148px;background:linear-gradient(135deg,#6B30B5 0%,#9044C0 45%,#C07ED8 80%,#C96CC0 100%);border-bottom-right-radius:130px 105px;z-index:1"></div>
-  <div style="position:absolute;top:11px;left:0;width:calc(55% - 11px);height:137px;background:#FAF7FE;border-bottom-right-radius:120px 96px;z-index:2"></div>
-
-  <!-- sweep bottom-right -->
-  <div style="position:absolute;bottom:0;right:0;width:50%;height:110px;background:linear-gradient(135deg,#6B30B5 0%,#9044C0 45%,#C07ED8 80%,#C96CC0 100%);border-top-left-radius:130px 105px;z-index:1"></div>
-  <div style="position:absolute;bottom:34px;right:0;width:calc(50% - 11px);height:76px;background:#FAF7FE;border-top-left-radius:120px 96px;z-index:2"></div>
-
-  <!-- website band -->
-  <div style="position:absolute;bottom:0;left:0;right:0;height:34px;background:linear-gradient(135deg,#6B30B5,#9044C0,#C07ED8,#C96CC0);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;letter-spacing:.05em;z-index:5">www.siyantechglobal.com</div>
-
-  <!-- logo -->
-  <div style="position:absolute;top:16px;right:28px;z-index:6">
-    <img src="${logoSrc}" style="width:${logoW};display:block" />
-  </div>
-
-  <!-- watermark -->
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.04;z-index:0;pointer-events:none">
-    <img src="/logo-stacked.png" style="width:200px" />
-  </div>
-
-  <!-- footer contacts -->
-  <div style="position:absolute;bottom:40px;left:44px;right:44px;display:flex;justify-content:space-between;font-size:8.5px;color:#1A1128;z-index:5;line-height:1.55">
-    <div><b>☏ ${COMPANY.phone}</b><br>✉ ${COMPANY.email}</div>
-    <div style="text-align:right">${COMPANY.address}</div>
-  </div>
-
-  <!-- document content -->
-  <div style="position:relative;z-index:3;padding:158px 44px 100px;color:#1A1128">`;
+function lhOpen(_useHoriz = false) {
+  return `<div style="position:relative;font-family:Poppins,sans-serif;width:794px;min-height:1123px;overflow:hidden;background:#fff;margin:0 auto"><img src="/letterhead.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none" /><div style="position:relative;z-index:3;padding:170px 65px 160px;color:#1A1128;font-size:11px;line-height:1.7">`;
 }
+
 
 function lhClose() {
   return `</div></div>`;
