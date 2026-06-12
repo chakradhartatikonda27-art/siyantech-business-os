@@ -138,7 +138,7 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
     const ctcM = Math.round(ctc/12);
     const b=Math.round(ctcM*.5), h=Math.round(ctcM*.25), c=1500, s=ctcM-b-h-c;
     return lhOpen(true) + docTitle("OFFER LETTER") + metaRow(ref, today) + `
-    <p style="font-size:10px;margin-bottom:7px;line-height:1.6">To,<br><b>${extra.candidateName||"[Candidate Name]"}</b><br>${extra.address||"Visakhapatnam, Andhra Pradesh"}</p>
+    <p style="font-size:10px;margin-bottom:7px;line-height:1.6;color:#1A1128">To,<br><b>${extra.candidateName||"[Candidate Name]"}</b><br>${extra.address||"Visakhapatnam, Andhra Pradesh"}</p>
     <p style="font-size:10px;font-weight:600;border-bottom:1px solid #E4DAF0;padding-bottom:6px;margin-bottom:9px">Subject: Letter of Offer — ${extra.role||emp.designation} | CTC: ₹ ${ctc.toLocaleString("en-IN")} Per Annum</p>
     <p style="font-size:10px;margin-bottom:7px;line-height:1.7;text-align:justify">Dear ${(extra.candidateName||"Candidate").split(" ")[0]},<br><br>
     We are delighted to offer you the position of <b>${extra.role||emp.designation}</b> at ${COMPANY.name}, Visakhapatnam. This offer follows your successful performance during the selection process and reflects our confidence in your potential.</p>
