@@ -43,7 +43,7 @@ const s = StyleSheet.create({
   page:     { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   pageWrap: { fontFamily:"Roboto", fontSize:10, color:BLACK, backgroundColor:"#fff" },
   lhBg:     { position:"absolute", top:0, left:0, width:"100%", height:"100%" },
-  content:  { paddingTop:265, paddingLeft:55, paddingRight:55, paddingBottom:160 },
+  content:  { marginTop:175, marginLeft:55, marginRight:55, marginBottom:195 },
   title:    { fontSize:17, fontWeight:700, color:PURPLE, textAlign:"center", borderBottomColor:PURPLE, borderBottomWidth:2, paddingBottom:5, marginBottom:12 },
   metaRow:  { flexDirection:"row", justifyContent:"space-between", fontSize:9.5, marginBottom:10 },
   bold:     { fontFamily:"Roboto", fontWeight:700 },
@@ -65,7 +65,7 @@ const s = StyleSheet.create({
   sigRow:   { flexDirection:"row", justifyContent:"space-between", marginTop:30 },
   sigBlock: { fontSize:10 },
   sigLine:  { borderTopColor:"#1A1128", borderTopWidth:1.5, marginTop:32, marginBottom:4, width:180 },
-  footer:   { position:"absolute", bottom:42, left:52, right:52, flexDirection:"row", justifyContent:"space-between", fontSize:8, color:BLACK },
+  footer:   { position:"absolute", bottom:90, left:52, right:52, flexDirection:"row", justifyContent:"space-between", fontSize:8, color:BLACK },
 });
 
 function inWords(n: number): string {
@@ -82,13 +82,16 @@ function inWords(n: number): string {
 function LHPage({children}:{children:React.ReactNode}){
   return(
     <Page size="A4" style={s.page} wrap>
-      {/* Letterhead image - fixed so it appears on every page without wrapping */}
       <Image src={LH_URL} style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}} fixed/>
-      {/* Content */}
-      <View style={s.content} wrap>{children}</View>
+      {/* This fixed spacer pushes content below header on EVERY page */}
+      <View style={{height:175}} fixed/>
+      <View style={{marginLeft:55, marginRight:55, marginBottom:195}} wrap>
+        {children}
+      </View>
     </Page>
   );
 }
+
 
 function TRow({cells,purple=false,total=false,idx=0}:{cells:string[];purple?:boolean;total?:boolean;idx?:number}){
   const rs=total?s.trTotal:idx%2===0?s.trEven:s.trOdd;
@@ -174,7 +177,7 @@ export function LetterPDF(props: LetterProps){
         <Text style={s.title}>OFFER LETTER</Text>
         <View style={s.metaRow}><Text><Text style={s.bold}>Date: </Text>{today}</Text><Text><Text style={s.bold}>Ref No: </Text>{refNumber}</Text></View>
         <Text style={{marginBottom:8}}>To,{"\n"}<Text style={s.bold}>{candidateN||"[Candidate Name]"}</Text>{"\n"}{extra?.address||"Visakhapatnam, Andhra Pradesh"}</Text>
-        <Text style={{marginBottom:8,fontWeight:600}}>Subject: Letter of Offer - {role} | CTC: Rs {ctc.toLocaleString("en-IN")} Per Annum</Text>
+        <Text style={{marginBottom:8,fontFamily:"Roboto",fontWeight:700}}>Subject: Letter of Offer - {role} | CTC: Rs {ctc.toLocaleString("en-IN")} Per Annum</Text>
         <View style={{borderBottomColor:"#ccc",borderBottomWidth:1,marginBottom:8}}/>
         <Text style={{marginBottom:6}}>Dear {(candidateN||"Candidate").split(" ")[0]},</Text>
         <Text style={s.para}>{desc||"We are delighted to offer you the position of "+role+" at "+COMPANY.name+", Visakhapatnam. This offer follows your successful performance during the selection process."}</Text>
