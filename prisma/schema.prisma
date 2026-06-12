@@ -1,0 +1,459 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Company {
+  id             String   @id @default(cuid())
+  name           String
+  addressLine1   String
+  addressLine2   String
+  city           String   @default("Visakhapatnam")
+  state          String   @default("Andhra Pradesh")
+  stateCode      String   @default("37")
+  pincode        String   @default("530016")
+  phone1         String   @default("+91 9390560625")
+  phone2         String   @default("+91 6302042599")
+  email          String   @default("Info@siyantechglobal.com")
+  website        String   @default("www.siyantechglobal.com")
+  gstin          String   @default("37ABHCS2274B2ZF")
+  pan            String   @default("ABHCS2274B")
+  cin            String   @default("U72900AP2021PTC119926")
+  epfoCode       String?  @default("GRVSP2507749000")
+  certifications String   @default("ISO 9001:2015 | ISO/IEC 27001:2022 | MSME Registered")
+  bankName       String   @default("ICICI Bank")
+  bankBranch     String   @default("Dwaraka Nagar Branch, Visakhapatnam")
+  bankAccount    String   @default("006005016567")
+  bankIfsc       String   @default("ICIC0000060")
+  signatoryName  String   @default("Chakradhar Tatikonda")
+  signatoryTitle String   @default("Managing Director")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  HR
+  ACCOUNTS
+  EMPLOYEE
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  passwordHash   String
+  role           Role           @default(EMPLOYEE)
+  employeeId     String?        @unique
+  active         Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  employee       Employee?      @relation(fields: [employeeId], references: [id])
+  approvedLeaves LeaveRequest[] @relation("approver")
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  ON_NOTICE
+  RELIEVED
+}
+
+model Employee {
+  id            String         @id @default(cuid())
+  empCode       String         @unique
+  fullName      String
+  designation   String
+  department    String
+  dateOfJoining DateTime
+  dateOfLeaving DateTime?
+  status        EmployeeStatus @default(ACTIVE)
+  email         String?
+  phone         String?
+  address       String?
+  pan           String?
+  uan           String?
+  aadhaarLast4  String?
+  bankName      String?
+  bankAccount   String?
+  bankIfsc      String?
+  monthlyGross  Decimal        @db.Decimal(12, 2)
+  basicPercent  Int            @default(40)
+  hraPercent    Int            @default(20)
+  conveyance    Decimal        @default(0) @db.Decimal(12, 2)
+  medicalLta    Decimal        @default(0) @db.Decimal(12, 2)
+  pfApplicable  Boolean        @default(true)
+  pfCapped      Boolean        @default(true)
+  shiftId       String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  shift         Shift?         @relation(fields: [shiftId], references: [id])
+  user          User?
+  attendance    Attendance[]
+  leaveRequests LeaveRequest[]
+  leaveBalances LeaveBalance[]
+  payslips      Payslip[]
+  hrLetters     HrLetter[]
+  documents     DocumentFile[]
+}
+
+model Shift {
+  id           String     @id @default(cuid())
+  name         String     @unique
+  startTime    String
+  endTime      String
+  graceMinutes Int        @default(15)
+  employees    Employee[]
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  HALF_DAY
+  WFH
+  ON_LEAVE
+  ABSENT
+  HOLIDAY
+  WEEK_OFF
+}
+
+model Attendance {
+  id            String           @id @default(cuid())
+  employeeId    String
+  date          DateTime         @db.Date
+  checkIn       DateTime?
+  checkOut      DateTime?
+  status        AttendanceStatus
+  workedMinutes Int?
+  note          String?
+  employee      Employee         @relation(fields: [employeeId], references: [id])
+
+  @@unique([employeeId, date])
+  @@index([date])
+}
+
+model Holiday {
+  id   String   @id @default(cuid())
+  date DateTime @unique @db.Date
+  name String
+}
+
+model LeaveType {
+  id          String         @id @default(cuid())
+  name        String         @unique
+  annualQuota Int
+  requests    LeaveRequest[]
+  balances    LeaveBalance[]
+}
+
+model LeaveBalance {
+  id          String    @id @default(cuid())
+  employeeId  String
+  leaveTypeId String
+  year        Int
+  balance     Decimal   @db.Decimal(5, 1)
+  employee    Employee  @relation(fields: [employeeId], references: [id])
+  leaveType   LeaveType @relation(fields: [leaveTypeId], references: [id])
+
+  @@unique([employeeId, leaveTypeId, year])
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model LeaveRequest {
+  id           String      @id @default(cuid())
+  employeeId   String
+  leaveTypeId  String
+  startDate    DateTime    @db.Date
+  endDate      DateTime    @db.Date
+  days         Decimal     @db.Decimal(4, 1)
+  reason       String?
+  status       LeaveStatus @default(PENDING)
+  approvedById String?
+  decidedAt    DateTime?
+  createdAt    DateTime    @default(now())
+  employee     Employee    @relation(fields: [employeeId], references: [id])
+  leaveType    LeaveType   @relation(fields: [leaveTypeId], references: [id])
+  approvedBy   User?       @relation("approver", fields: [approvedById], references: [id])
+}
+
+model Client {
+  id            String      @id @default(cuid())
+  name          String
+  contactPerson String?
+  email         String?
+  phone         String?
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  state         String
+  stateCode     String
+  gstin         String?
+  cin           String?
+  createdAt     DateTime    @default(now())
+  quotations    Quotation[]
+  invoices      Invoice[]
+  leads         Lead[]
+}
+
+enum LeadStage {
+  NEW
+  DISCUSSION
+  QUOTE_SENT
+  WON
+  LOST
+}
+
+model Lead {
+  id           String    @id @default(cuid())
+  title        String
+  source       String?
+  contactName  String?
+  contactPhone String?
+  estValue     Decimal?  @db.Decimal(14, 2)
+  stage        LeadStage @default(NEW)
+  nextFollowUp DateTime? @db.Date
+  notes        String?
+  clientId     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  client       Client?   @relation(fields: [clientId], references: [id])
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  CONVERTED
+  EXPIRED
+}
+
+model Quotation {
+  id               String          @id @default(cuid())
+  number           String          @unique
+  clientId         String
+  date             DateTime        @db.Date
+  validUntil       DateTime?       @db.Date
+  subject          String
+  serviceChargePct Decimal         @default(0) @db.Decimal(5, 2)
+  status           QuoteStatus     @default(DRAFT)
+  invoiceId        String?         @unique
+  createdAt        DateTime        @default(now())
+  client           Client          @relation(fields: [clientId], references: [id])
+  invoice          Invoice?        @relation(fields: [invoiceId], references: [id])
+  items            QuotationItem[]
+}
+
+model QuotationItem {
+  id          String    @id @default(cuid())
+  quotationId String
+  description String
+  qty         Decimal   @default(1) @db.Decimal(10, 2)
+  rate        Decimal   @db.Decimal(14, 2)
+  sortOrder   Int       @default(0)
+  quotation   Quotation @relation(fields: [quotationId], references: [id], onDelete: Cascade)
+}
+
+enum SupplyType {
+  INTRA
+  INTER
+}
+
+model Invoice {
+  id               String        @id @default(cuid())
+  number           String        @unique
+  clientId         String
+  date             DateTime      @db.Date
+  dueDate          DateTime?     @db.Date
+  placeOfSupply    String
+  supplyType       SupplyType
+  serviceChargePct Decimal       @default(0) @db.Decimal(5, 2)
+  gstRate          Decimal       @default(18) @db.Decimal(5, 2)
+  subtotal         Decimal       @db.Decimal(14, 2)
+  serviceCharge    Decimal       @db.Decimal(14, 2)
+  taxableAmount    Decimal       @db.Decimal(14, 2)
+  cgst             Decimal       @db.Decimal(14, 2)
+  sgst             Decimal       @db.Decimal(14, 2)
+  igst             Decimal       @db.Decimal(14, 2)
+  roundOff         Decimal       @db.Decimal(6, 2)
+  grandTotal       Decimal       @db.Decimal(14, 2)
+  amountInWords    String
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  client           Client        @relation(fields: [clientId], references: [id])
+  items            InvoiceItem[]
+  payments         Payment[]
+  quotation        Quotation?
+
+  @@index([date])
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  description String
+  sacCode     String  @default("998313")
+  qty         Decimal @default(1) @db.Decimal(10, 2)
+  rate        Decimal @db.Decimal(14, 2)
+  sortOrder   Int     @default(0)
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+enum PaymentMode {
+  NEFT_RTGS
+  UPI
+  IMPS
+  CHEQUE
+  CASH
+}
+
+model Payment {
+  id            String      @id @default(cuid())
+  receiptNumber String      @unique
+  invoiceId     String
+  date          DateTime    @db.Date
+  amount        Decimal     @db.Decimal(14, 2)
+  mode          PaymentMode
+  reference     String?
+  createdAt     DateTime    @default(now())
+  invoice       Invoice     @relation(fields: [invoiceId], references: [id])
+}
+
+model Expense {
+  id            String   @id @default(cuid())
+  date          DateTime @db.Date
+  vendor        String
+  category      String
+  vendorGstin   String?
+  taxableAmount Decimal  @db.Decimal(14, 2)
+  gstRate       Decimal  @default(18) @db.Decimal(5, 2)
+  gstAmount     Decimal  @db.Decimal(14, 2)
+  total         Decimal  @db.Decimal(14, 2)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@index([date])
+}
+
+enum PayrollStatus {
+  DRAFT
+  FINALIZED
+}
+
+model PayrollRun {
+  id       String        @id @default(cuid())
+  month    Int
+  year     Int
+  status   PayrollStatus @default(DRAFT)
+  runAt    DateTime      @default(now())
+  payslips Payslip[]
+
+  @@unique([month, year])
+}
+
+model Payslip {
+  id              String     @id @default(cuid())
+  payrollRunId    String
+  employeeId      String
+  workingDays     Decimal    @db.Decimal(4, 1)
+  payableDays     Decimal    @db.Decimal(4, 1)
+  lopDays         Decimal    @db.Decimal(4, 1)
+  basic           Decimal    @db.Decimal(12, 2)
+  hra             Decimal    @db.Decimal(12, 2)
+  conveyance      Decimal    @db.Decimal(12, 2)
+  medicalLta      Decimal    @db.Decimal(12, 2)
+  special         Decimal    @db.Decimal(12, 2)
+  grossEarned     Decimal    @db.Decimal(12, 2)
+  pfEmployee      Decimal    @db.Decimal(12, 2)
+  pfEmployer      Decimal    @db.Decimal(12, 2)
+  professionalTax Decimal    @db.Decimal(8, 2)
+  tds             Decimal    @db.Decimal(12, 2)
+  netPay          Decimal    @db.Decimal(12, 2)
+  amountInWords   String
+  paidOn          DateTime?  @db.Date
+  paymentRef      String?
+  employee        Employee   @relation(fields: [employeeId], references: [id])
+  payrollRun      PayrollRun @relation(fields: [payrollRunId], references: [id], onDelete: Cascade)
+
+  @@unique([payrollRunId, employeeId])
+}
+
+enum LetterType {
+  OFFER
+  APPOINTMENT
+  EXPERIENCE
+  RELIEVING
+  SALARY_CERTIFICATE
+}
+
+model HrLetter {
+  id            String     @id @default(cuid())
+  refNumber     String     @unique
+  type          LetterType
+  employeeId    String?
+  candidateName String?
+  payload       Json
+  issuedAt      DateTime   @default(now())
+  employee      Employee?  @relation(fields: [employeeId], references: [id])
+}
+
+enum CandidateStage {
+  SOURCED
+  SCREENED
+  SUBMITTED
+  INTERVIEW
+  OFFERED
+  JOINED
+  REJECTED
+}
+
+model Candidate {
+  id          String         @id @default(cuid())
+  name        String
+  role        String
+  clientName  String
+  email       String?
+  phone       String?
+  expectedCtc Decimal?       @db.Decimal(14, 2)
+  stage       CandidateStage @default(SOURCED)
+  resumeUrl   String?
+  notes       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model DocumentFile {
+  id         String    @id @default(cuid())
+  employeeId String?
+  kind       String
+  fileName   String
+  url        String
+  uploadedAt DateTime  @default(now())
+  employee   Employee? @relation(fields: [employeeId], references: [id])
+}
+
+model NumberSequence {
+  key    String @id
+  prefix String
+  suffix String @default("")
+  pad    Int    @default(3)
+  next   Int    @default(1)
+}
+
+model AuditLog {
+  id       String   @id @default(cuid())
+  userId   String?
+  action   String
+  entity   String
+  entityId String
+  payload  Json?
+  at       DateTime @default(now())
+
+  @@index([entity, entityId])
+}
