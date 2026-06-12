@@ -53,7 +53,7 @@ function getRefNumber(type: string) {
 // useHoriz=true  → horizontal logo (invoices, offer letter)
 // useHoriz=false → stacked logo   (payslip, experience, relieving, salary)
 function lhOpen(_useHoriz = false) {
-  return `<div style="position:relative;font-family:Poppins,sans-serif;width:794px;min-height:1123px;overflow:hidden;background:#fff;margin:0 auto"><img src="/letterhead.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none" /><div style="position:relative;z-index:3;padding:170px 65px 160px;color:#1A1128;font-size:11px;line-height:1.7">`;
+  return `<div style="position:relative;font-family:Poppins,sans-serif;width:794px;min-height:1123px;overflow:hidden;background:#fff;margin:0 auto"><img src="/letterhead.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none" /><div style="position:relative;z-index:3;padding:280px 65px 160px;color:#1A1128;font-size:11px;line-height:1.7">`;
 }
 
 
