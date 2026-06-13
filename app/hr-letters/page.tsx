@@ -241,8 +241,8 @@ export default function HRLettersPage() {
   const downloadPDF = async () => {
     const sig = SIGNATORIES[sigIdx];
     const body = {
-      type, empName:emp.fullName, empCode:emp.empCode, designation:emp.designation,
-      department:emp.department, dateOfJoining:emp.dateOfJoining, monthlyGross:emp.monthlyGross,
+      type, empName:getEmp().fullName, empCode:getEmp().empCode, designation:getEmp().designation,
+      department:getEmp().department, dateOfJoining:getEmp().dateOfJoining, monthlyGross:getEmp().monthlyGross,
       description:extra.description||"", extra, compRows,
       signatory:sig.name, sigTitle:sig.title,
       refNumber:getRef(type), today:"12th June 2026",
@@ -254,9 +254,20 @@ export default function HRLettersPage() {
     URL.revokeObjectURL(url);
   };
 
+  const getEmp = () => ({
+    id:           empId,
+    empCode:      extra.customCode  || emp.empCode,
+    fullName:     extra.customName  || emp.fullName,
+    designation:  extra.customDesig || emp.designation,
+    department:   extra.customDept  || emp.department,
+    dateOfJoining:extra.customDOJ   || emp.dateOfJoining,
+    monthlyGross: +(extra.customGross|| emp.monthlyGross),
+    bankName:     emp.bankName||"",
+  });
+
   const generate = () => {
     const sig = SIGNATORIES[sigIdx];
-    setPreview(generateLetter(type, emp, extra, compRows, sig.name, sig.title));
+    setPreview(generateLetter(type, getEmp(), extra, compRows, sig.name, sig.title));
   };
 
   const IS = {width:"100%", padding:"8px 10px", border:"1px solid #E2D8EE", borderRadius:"8px", fontSize:"12.5px", color:"#1E1428", background:"#fff"};
@@ -307,9 +318,26 @@ export default function HRLettersPage() {
               {type!=="offer" && (
                 <div style={{marginBottom:"14px"}}>
                   <label style={LS}>Employee</label>
-                  <select value={empId} onChange={e=>updateEmp(e.target.value)} style={IS}>
+                  <select value={empId} onChange={e=>{updateEmp(e.target.value); setExtra({});}} style={{...IS,marginBottom:"8px"}}>
                     {EMPLOYEES.map(e=><option key={e.id} value={e.id}>{e.fullName} — {e.designation}</option>)}
                   </select>
+                  <div style={{fontSize:"11px",color:"#6F32B3",marginBottom:"6px",fontWeight:"600"}}>✏️ Override any field below (leave blank to use dropdown values)</div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px"}}>
+                    {[
+                      {k:"customName",   l:"Full Name",         p:emp.fullName},
+                      {k:"customCode",   l:"Emp Code",          p:emp.empCode},
+                      {k:"customDesig",  l:"Designation",       p:emp.designation},
+                      {k:"customDept",   l:"Department",        p:emp.department},
+                      {k:"customDOJ",    l:"Date of Joining",   p:emp.dateOfJoining},
+                      {k:"customGross",  l:"Monthly Gross (₹)", p:String(emp.monthlyGross)},
+                      {k:"lastDay",      l:"Last Working Day",  p:"12th June 2026"},
+                    ].map(f=>(
+                      <div key={f.k}>
+                        <label style={{...LS,fontSize:"10px"}}>{f.l}</label>
+                        <input placeholder={f.p} value={extra[f.k]||""} onChange={e=>setEx(f.k,e.target.value)} style={{...IS,fontSize:"11px"}}/>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
