@@ -165,18 +165,22 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
   }
 
   if (type==="relieving") {
+    const name  = extra.customName  || emp.fullName;
+    const desig = extra.customDesig || emp.designation;
+    const dept  = extra.customDept  || emp.department;
+    const doj   = extra.customDOJ   || emp.dateOfJoining;
     return lhOpen()+`
     <div style="font-size:20px;font-weight:700;color:#6B30B5;text-align:center;border-bottom:2px solid #6B30B5;padding-bottom:6px;margin-bottom:14px">RELIEVING LETTER</div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:12px"><span><b>Date:</b> ${today}</span><span><b>Ref No:</b> ${ref}</span></div>
-    <p style="margin-bottom:10px">To,<br><b>${emp.fullName}</b><br>${emp.designation}</p>
-    <p style="margin-bottom:8px">Dear ${emp.fullName.split(" ")[0]},</p>
-    <p style="margin-bottom:8px;text-align:justify">${desc||`This is with reference to your resignation from the position of <b>${emp.designation}</b> at ${COMPANY.name}.`}</p>
+    <p style="margin-bottom:10px">To,<br><b>${name}</b><br>${desig}</p>
+    <p style="margin-bottom:8px">Dear ${name.split(" ")[0]},</p>
+    <p style="margin-bottom:8px;text-align:justify">${desc||`This is with reference to your resignation from the position of <b>${desig}</b> at ${COMPANY.name}.`}</p>
     <p style="margin-bottom:8px;text-align:justify">We confirm that your resignation has been accepted and you stand relieved from the services of the company with effect from the close of business hours on <b>${extra.lastDay||today}</b>.</p>
     <p style="margin-bottom:14px;text-align:justify">We further confirm that you have completed the handover of all company assets and responsibilities, and there are no dues pending against you.</p>
     ${secBand("Employment Summary")}
     <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
       ${thRow(["Field","Details","Field","Details"])}
-      ${[["Employee Name",emp.fullName,"Designation",emp.designation],["Date of Joining",emp.dateOfJoining,"Last Working Day",extra.lastDay||today],["Department",emp.department,"Status","Relieved — No Dues Pending"]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
+      ${[["Employee Name",name,"Designation",desig],["Date of Joining",doj,"Last Working Day",extra.lastDay||today],["Department",dept,"Status","Relieved — No Dues Pending"]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
     </table>
     ${sigBlock(signatory, sigTitle)}
     `+lhClose();
