@@ -148,17 +148,22 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
   }
 
   if (type==="experience") {
+    const name  = extra.customName  || emp.fullName;
+    const code  = extra.customCode  || emp.empCode;
+    const desig = extra.customDesig || emp.designation;
+    const dept  = extra.customDept  || emp.department;
+    const doj   = extra.customDOJ   || emp.dateOfJoining;
     return lhOpen()+`
     <div style="font-size:20px;font-weight:700;color:#6B30B5;text-align:center;border-bottom:2px solid #6B30B5;padding-bottom:6px;margin-bottom:14px">EXPERIENCE CERTIFICATE</div>
     <div style="display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:16px"><span><b>Date:</b> ${today}</span><span><b>Ref No:</b> ${ref}</span></div>
     <p style="font-weight:700;margin-bottom:12px">To Whomsoever It May Concern</p>
-    <p style="margin-bottom:10px;text-align:justify">${desc||`This is to certify that <b>${emp.fullName}</b> (Employee Code: ${emp.empCode}) was employed with ${COMPANY.name}, Visakhapatnam, as <b>${emp.designation}</b> in the ${emp.department} department.`}</p>
+    <p style="margin-bottom:10px;text-align:justify">${desc||`This is to certify that <b>${name}</b> (Employee Code: ${code}) was employed with ${COMPANY.name}, Visakhapatnam, as <b>${desig}</b> in the ${dept} department.`}</p>
     <p style="margin-bottom:10px;text-align:justify">They joined our organization on <b>${emp.dateOfJoining}</b> and served until <b>${extra.lastDay||today}</b>. During this period, they demonstrated strong commitment, professionalism and a positive attitude.</p>
-    <p style="margin-bottom:14px;text-align:justify">We wish ${emp.fullName.split(" ")[0]} the very best in all future career endeavours.</p>
+    <p style="margin-bottom:14px;text-align:justify">We wish ${name.split(" ")[0]} the very best in all future career endeavours.</p>
     ${secBand("Employment Details")}
     <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
       ${thRow(["Field","Details","Field","Details"])}
-      ${[["Employee Name",emp.fullName,"Employee Code",emp.empCode],["Designation",emp.designation,"Department",emp.department],["Date of Joining",emp.dateOfJoining,"Last Working Day",extra.lastDay||today]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
+      ${[["Employee Name",name,"Employee Code",code],["Designation",desig,"Department",dept],["Date of Joining",doj,"Last Working Day",extra.lastDay||today]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
     </table>
     ${sigBlock(signatory, sigTitle)}
     `+lhClose();
@@ -166,6 +171,7 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
 
   if (type==="relieving") {
     const name  = extra.customName  || emp.fullName;
+    const code  = extra.customCode  || emp.empCode;
     const desig = extra.customDesig || emp.designation;
     const dept  = extra.customDept  || emp.department;
     const doj   = extra.customDOJ   || emp.dateOfJoining;
@@ -180,7 +186,7 @@ function generateLetter(type: string, emp: typeof EMPLOYEES[0], extra: Record<st
     ${secBand("Employment Summary")}
     <table style="width:100%;border-collapse:collapse;margin-bottom:14px">
       ${thRow(["Field","Details","Field","Details"])}
-      ${[["Employee Name",name,"Designation",desig],["Date of Joining",doj,"Last Working Day",extra.lastDay||today],["Department",dept,"Status","Relieved — No Dues Pending"]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
+      ${[["Employee Name",name,"Employee Code",code],["Designation",desig,"Department",dept],["Date of Joining",doj,"Last Working Day",extra.lastDay||today],["Status","Relieved — No Dues Pending",""," "]].map(([k1,v1,k2,v2],i)=>`<tr style="background:${i%2?"#F6F1FB":"#fff"}"><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v1}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px;color:#6B30B5;font-weight:600">${k2}</td><td style="padding:6px 10px;border:1px solid #E4DAF0;font-size:10px">${v2}</td></tr>`).join("")}
     </table>
     ${sigBlock(signatory, sigTitle)}
     `+lhClose();
@@ -329,6 +335,7 @@ export default function HRLettersPage() {
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px"}}>
                     {[
                       {k:"customName",   l:"Full Name",         p:emp.fullName},
+                      {k:"customCode",   l:"Employee Code",     p:emp.empCode},
                       {k:"customDesig",  l:"Designation",       p:emp.designation},
                       {k:"customDept",   l:"Department",        p:emp.department},
                       {k:"customDOJ",    l:"Date of Joining",   p:emp.dateOfJoining},
