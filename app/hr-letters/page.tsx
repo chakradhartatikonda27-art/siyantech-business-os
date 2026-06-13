@@ -82,13 +82,7 @@ function lhOpen() {
   <div style="position:relative;z-index:3;padding:185px 65px 140px;color:#1A1128;font-size:11px;line-height:1.7">`;
 }
 function lhClose() {
-  return `
-  </div>
-  <div style="position:absolute;bottom:42px;left:55px;right:55px;display:flex;justify-content:space-between;font-size:8.5px;color:#1A1128;z-index:4;line-height:1.6">
-    <div><b>☏ +91 9390560625 / +91 6302042599</b><br>✉ Info@siyantechglobal.com</div>
-    <div style="text-align:right">Flat No. S-4, Third Floor, Rednam Plaza,<br>Dwarakanagar Second Lane, Visakhapatnam - 530016</div>
-  </div>
-</div>`;
+  return `</div></div>`;
 }
 
 function secBand(t: string) {
