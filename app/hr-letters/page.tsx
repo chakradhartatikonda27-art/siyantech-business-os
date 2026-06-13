@@ -56,16 +56,22 @@ function getRef(type: string) {
 }
 
 function defaultCompRows(g: number): CompRow[] {
-  const basic = Math.round(g*0.5), hra=Math.round(g*0.25), conv=1500;
-  const pf = Math.min(Math.round(basic*0.12),1800), ins=500;
-  const special = Math.max(g-basic-hra-conv-pf-ins,0);
+  // Indian market standard salary structure
+  const basic   = Math.round(g * 0.40);           // 40% of gross
+  const hra     = Math.round(basic * 0.50);        // 50% of basic (metro HRA)
+  const conv    = Math.min(Math.round(g * 0.05), 3200); // 5% of gross, max 3200
+  const lta     = Math.min(Math.round(g * 0.04), 3000); // Leave Travel Allowance
+  const medical = Math.min(Math.round(g * 0.02), 1250); // Medical allowance
+  const pf      = Math.min(Math.round(basic * 0.12), 1800); // PF capped at 1800
+  const special = Math.max(g - basic - hra - conv - lta - medical - pf, 0);
   return [
-    {label:"Basic Salary (50%)", monthly:basic, annual:basic*12},
-    {label:"House Rent Allowance — HRA (25%)", monthly:hra, annual:hra*12},
-    {label:"Conveyance Allowance", monthly:conv, annual:conv*12},
-    {label:"Provident Fund — Employee (12% of Basic, capped)", monthly:pf, annual:pf*12},
-    {label:"Medical Insurance", monthly:ins, annual:ins*12},
-    {label:"Special Allowance", monthly:special, annual:special*12},
+    {label:"Basic Salary (40%)",                         monthly:basic,   annual:basic*12},
+    {label:"House Rent Allowance — HRA (50% of Basic)",  monthly:hra,     annual:hra*12},
+    {label:"Conveyance Allowance",                       monthly:conv,    annual:conv*12},
+    {label:"Leave Travel Allowance (LTA)",               monthly:lta,     annual:lta*12},
+    {label:"Medical Allowance",                          monthly:medical, annual:medical*12},
+    {label:"Provident Fund — Employee (12% of Basic)",   monthly:pf,      annual:pf*12},
+    {label:"Special Allowance",                          monthly:special, annual:special*12},
   ];
 }
 
@@ -323,13 +329,23 @@ export default function HRLettersPage() {
                   {k:"empType",l:"Employment Type",p:"Full Time"},
                   {k:"joiningDate",l:"Date of Joining",p:"01st July 2026"},
                   {k:"reportingTo",l:"Reporting To",p:"HR Manager / Managing Director"},
-                  {k:"ctc",l:"Annual CTC (₹)",p:"1450000"},
                 ].map(f=>(
                   <div key={f.k} style={{marginBottom:"11px"}}>
                     <label style={LS}>{f.l}</label>
-                    <input placeholder={f.p} value={extra[f.k]||""} onChange={e=>setEx(f.k,e.target.value)} style={IS} />
+                    <input placeholder={f.p} value={extra[f.k]||""} onChange={e=>{setEx(f.k,e.target.value);}} style={IS} />
                   </div>
                 ))}
+                <div style={{marginBottom:"11px"}}>
+                  <label style={LS}>Annual CTC (₹)</label>
+                  <input placeholder="1450000" value={extra["ctc"]||""} onChange={e=>{
+                    const ctc=+e.target.value||0;
+                    setEx("ctc",e.target.value);
+                    if(ctc>0){
+                      const monthly=Math.round(ctc/12);
+                      setCompRows(defaultCompRows(monthly));
+                    }
+                  }} style={IS} />
+                </div>
               </>)}
 
               {type==="offer" && (

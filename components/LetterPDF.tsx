@@ -160,8 +160,9 @@ function CompTable({compRows,label}:{compRows:CompRow[];label:string}){
 export function LetterPDF(props: LetterProps){
   const{type,empName,empCode,designation,department,dateOfJoining,monthlyGross,description,extra,compRows,signatory,sigTitle,refNumber,today}=props;
   const rows=compRows||[];
-  const annual=monthlyGross*12;
-  const ctc=+(extra?.ctc||annual);
+  const ctcInput = +(extra?.ctc||0);
+  const annual = ctcInput > 0 ? ctcInput : monthlyGross*12;
+  const ctc = ctcInput > 0 ? ctcInput : annual;
   const candidateN=extra?.candidateName||"";
   const role=extra?.role||designation||"";
   const dept=extra?.dept||department||"";
