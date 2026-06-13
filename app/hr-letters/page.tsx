@@ -325,7 +325,6 @@ export default function HRLettersPage() {
                   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"6px"}}>
                     {[
                       {k:"customName",   l:"Full Name",         p:emp.fullName},
-                      {k:"customCode",   l:"Emp Code",          p:emp.empCode},
                       {k:"customDesig",  l:"Designation",       p:emp.designation},
                       {k:"customDept",   l:"Department",        p:emp.department},
                       {k:"customDOJ",    l:"Date of Joining",   p:emp.dateOfJoining},
